@@ -5,21 +5,19 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
+
+	model "go-getway/httpd/Models"
 
 	"github.com/gin-gonic/gin"
 )
 
 // ProsesAPI -- api proxy proses
-func ProsesAPI(res *gin.Context) (map[string]interface{}, int, error) {
+func ProsesAPI(res *gin.Context, path, baseURL string, idapi int) (map[string]interface{}, int, error) {
+	start := time.Now()
 
 	ur := res.Request.RequestURI
-	basePath := "/admin/data/bases/"
-	baseURL := "http://ved.carsworld.id:7012"
-
-	uris := strings.ReplaceAll(ur, basePath, "")
-
-	// dump := res.Params
-
+	uris := strings.ReplaceAll(ur, path, "")
 	url := fmt.Sprintf("%v/%v", baseURL, uris)
 
 	head := res.Request.Header
@@ -47,6 +45,11 @@ func ProsesAPI(res *gin.Context) (map[string]interface{}, int, error) {
 	defer response.Body.Close()
 	_ = json.NewDecoder(response.Body).Decode(&data)
 
+	elapsed := float64(time.Since(start)) / float64(1000000)
+
+	// Create logs api
+	ip := res.Request.RemoteAddr
+	go model.Logs(ip, idapi, elapsed)
 	return data, response.StatusCode, nil
 
 }

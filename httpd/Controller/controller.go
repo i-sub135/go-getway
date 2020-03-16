@@ -1,9 +1,13 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
+	addone "go-getway/httpd/Addone"
 	kernel "go-getway/httpd/Kernel"
+	model "go-getway/httpd/Models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,24 +25,27 @@ func IndexCtrl(res *gin.Context) {
 func APIGetway(res *gin.Context) {
 
 	urls := res.Request.URL.Path
-	// head := res.Request.Header
-	// method := res.Request.Method
+	split := strings.Split(urls, "/")
+	mod := addone.CheckMode(split[1])
+	ver := split[2]
+	cat := split[3]
 
-	// for ke, val := range head {
-	// 	fmt.Printf("==:: %v ==> %v \n", ke, val[0])
-	// }
-	// fmt.Println(method)
-	// fmt.Println(reqBody)
-
-	proses, code, _ := kernel.ProsesAPI(res)
-	if proses == nil {
-		res.JSON(http.StatusServiceUnavailable, gin.H{
-			"code":     http.StatusServiceUnavailable,
-			"messages": "Service Unavailable",
-			"url":      urls,
-		})
-
+	apiRoutes := model.GetRoutes(mod, ver, cat)
+	if apiRoutes.ID == 0 {
+		addone.NotFound(res)
 		return
 	}
+	if res.Request.Method != apiRoutes.Methods {
+		addone.NotAllow(res)
+		return
+	}
+
+	path := fmt.Sprintf("/%v/%v/%v/", split[1], apiRoutes.Version, apiRoutes.Category)
+	proses, code, _ := kernel.ProsesAPI(res, path, apiRoutes.Content, apiRoutes.ID)
+	if proses == nil {
+		addone.Unavailable(res)
+		return
+	}
+
 	res.JSON(code, proses)
 }
