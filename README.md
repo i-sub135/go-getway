@@ -5,12 +5,12 @@ Moduleing Api project
 # REQUIREMENTS
 
 - OS base terminal BASH (debian, ubuntu, etc)
-- golang version 1.12 or uptodate
+- golang version 1.12 or latest
 - [makefile](https://en.wikipedia.org/wiki/Makefile)
 
 # INSTALATION
 
-    - git clone https://github.com/iyan-subdiana135/api-module.git
+    - git clone https://github.com/iyan-subdiana135/go-getway.git
     - open in terminal
     - go mod download       [install package requirement]
     - make run              [run project by go prosesing]
