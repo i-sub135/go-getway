@@ -52,7 +52,7 @@ func ProsesAPI(res *gin.Context, path, baseURL string, idapi int) (map[string]in
 	fmt.Println(response.Status)
 
 	ip := res.Request.RemoteAddr
-	go model.Logs(ip, idapi, elapsed)
+	go model.Logs(ip, idapi, elapsed, response.Status)
 	return data, response.StatusCode, nil
 
 }

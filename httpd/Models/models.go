@@ -37,6 +37,7 @@ type (
 		IP      string
 		IDApi   int
 		Elapse  float64
+		Status  string
 		Created string
 	}
 )
@@ -52,13 +53,14 @@ func GetRoutes(mod, ver, cat string) APIRoutes {
 }
 
 // Logs -- api logs
-func Logs(ip string, idapi int, elapse float64) {
+func Logs(ip string, idapi int, elapse float64, status string) {
 	runtime.GOMAXPROCS(1)
 	now := time.Now().Format("2006-01-02 15:04:05")
 	log := APILogs{
 		IP:      ip,
 		IDApi:   idapi,
 		Elapse:  elapse,
+		Status:  status,
 		Created: now,
 	}
 	sql.Table("api_logs").Create(&log)
