@@ -27,7 +27,7 @@ func ProsesAPI(res *gin.Context, path, baseURL string, idapi int) (map[string]in
 	var client = &http.Client{}
 
 	method := res.Request.Method
-	request, err := http.NewRequest(method, url, nil)
+	request, err := http.NewRequest(method, url, res.Request.Body)
 	if err != nil {
 		return nil, -1, err
 	}
@@ -39,6 +39,7 @@ func ProsesAPI(res *gin.Context, path, baseURL string, idapi int) (map[string]in
 	response, err := client.Do(request)
 	if err != nil {
 		fmt.Println("errs client.Do(request)")
+		fmt.Println(err)
 		return nil, -1, err
 	}
 
@@ -48,6 +49,8 @@ func ProsesAPI(res *gin.Context, path, baseURL string, idapi int) (map[string]in
 	elapsed := float64(time.Since(start)) / float64(1000000)
 
 	// Create logs api
+	fmt.Println(response.Status)
+
 	ip := res.Request.RemoteAddr
 	go model.Logs(ip, idapi, elapsed)
 	return data, response.StatusCode, nil
