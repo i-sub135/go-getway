@@ -5,6 +5,7 @@ Moduleing Api project
 # REQUIREMENTS
 
 - OS base terminal BASH (debian, ubuntu, etc)
+- golang version 1.12 or uptodate
 - [makefile](https://en.wikipedia.org/wiki/Makefile)
 
 # INSTALATION
@@ -12,10 +13,10 @@ Moduleing Api project
     - git clone https://github.com/iyan-subdiana135/api-module.git
     - open in terminal
     - go mod download       [install package requirement]
-    - make init             [initial project]
-    - make run              [run project]
+    - make run              [run project by go prosesing]
     - make build            [build project]
     - make autostart        [run hot reload. note : reflex module is required]
+    - make start            [run project by execute file production mode]
 
 
 

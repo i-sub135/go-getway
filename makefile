@@ -6,3 +6,6 @@ autostart:
 
 build:
 	go build httpd/*.go
+
+start:
+	./main
